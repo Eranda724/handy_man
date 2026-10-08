@@ -3,6 +3,7 @@ import 'package:handy_man/core/enums/time_slot.dart';
 import 'package:handy_man/data/models/booking.dart';
 import 'package:handy_man/domain/double_booking.dart';
 import 'package:handy_man/core/enums/booking_status.dart';
+import 'package:handy_man/domain/booking_logic.dart';
 
 class BookingsNotifier extends ChangeNotifier {
   final List<Booking> _bookings = [];
@@ -54,6 +55,21 @@ class BookingsNotifier extends ChangeNotifier {
     if (index != -1) {
       _bookings[index] = _bookings[index].copyWith(isReviewed: true);
       notifyListeners();
+    }
+  }
+
+  void updateBookingStatus(String id, BookingStatus newStatus) {
+    final index = _bookings.indexWhere((b) => b.id == id);
+    if (index != -1) {
+      final currentStatus = _bookings[index].status;
+      if (BookingStatusRules.canTransition(currentStatus, newStatus)) {
+        _bookings[index] = _bookings[index].copyWith(status: newStatus);
+        notifyListeners();
+      } else {
+        throw Exception(
+          'Blocked in business logic: Invalid transition from ${currentStatus.name} to ${newStatus.name}',
+        );
+      }
     }
   }
 }
