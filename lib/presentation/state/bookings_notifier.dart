@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handy_man/core/enums/time_slot.dart';
 import 'package:handy_man/data/models/booking.dart';
 import 'package:handy_man/domain/double_booking.dart';
+import 'package:handy_man/core/enums/booking_status.dart';
 
 class BookingsNotifier extends ChangeNotifier {
   final List<Booking> _bookings = [];
@@ -36,5 +37,23 @@ class BookingsNotifier extends ChangeNotifier {
         )
         .map((b) => b.timeSlot)
         .toList();
+  }
+
+  void cancelBooking(String id) {
+    final index = _bookings.indexWhere((b) => b.id == id);
+    if (index != -1) {
+      _bookings[index] = _bookings[index].copyWith(
+        status: BookingStatus.cancelled,
+      );
+      notifyListeners();
+    }
+  }
+
+  void markAsReviewed(String id) {
+    final index = _bookings.indexWhere((b) => b.id == id);
+    if (index != -1) {
+      _bookings[index] = _bookings[index].copyWith(isReviewed: true);
+      notifyListeners();
+    }
   }
 }

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:handy_man/presentation/state/mode_notifier.dart';
 import 'package:handy_man/presentation/screens/home/home_screen.dart';
+import 'package:handy_man/presentation/screens/booking/my_bookings_screen.dart';
+
+import 'package:handy_man/presentation/screens/jobs/jobs_screen.dart';
+import 'package:handy_man/presentation/screens/profile/profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -19,8 +23,8 @@ class _MainScreenState extends State<MainScreen> {
 
     final screens = [
       const HomeScreen(),
-      const Center(child: Text('Bookings / Jobs Screen (Pending)')),
-      const Center(child: Text('Profile Screen (Pending)')),
+      isProvider ? const JobsScreen() : const MyBookingsScreen(),
+      const ProfileScreen(),
     ];
 
     return Scaffold(

@@ -72,4 +72,20 @@ class ProvidersNotifier extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void addReviewToProvider(String providerId, double newStars) {
+    final index = _providers.indexWhere((p) => p.id == providerId);
+    if (index != -1) {
+      final p = _providers[index];
+      final newCount = p.reviewCount + 1;
+      // rating
+      final updatedRating = ((p.rating * p.reviewCount) + newStars) / newCount;
+
+      _providers[index] = p.copyWith(
+        rating: double.parse(updatedRating.toStringAsFixed(1)),
+        reviewCount: newCount,
+      );
+      notifyListeners();
+    }
+  }
 }
