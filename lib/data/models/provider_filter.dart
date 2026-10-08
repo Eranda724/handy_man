@@ -24,7 +24,6 @@ class ProviderFilter {
 
   int get activeCount {
     var count = 0;
-    if (categoryId != null) count++;
     if (minRating > 0) count++;
     if (minRate != minRateLimit || maxRate != maxRateLimit) count++;
     if (availableOnly) count++;

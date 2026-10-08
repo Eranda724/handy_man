@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:handy_man/core/enums/provider_list_state.dart';
 import 'package:handy_man/presentation/state/providers_notifier.dart';
+import 'package:handy_man/presentation/widgets/filter_bottom_sheet.dart';
 
 class ProviderListScreen extends StatefulWidget {
   final String categoryId;
@@ -50,9 +51,42 @@ class _ProviderListScreenState extends State<ProviderListScreen> {
   @override
   Widget build(BuildContext context) {
     final notifier = context.watch<ProvidersNotifier>();
+    final activeCount = notifier.filter.activeCount;
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.categoryName)),
+      appBar: AppBar(
+        title: Text(widget.categoryName),
+        actions: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.filter_list),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (_) => const FilterBottomSheet(),
+                  );
+                },
+              ),
+              if (activeCount > 0)
+                Positioned(
+                  right: 8,
+                  top: 12,
+                  child: CircleAvatar(
+                    radius: 8,
+                    backgroundColor: Colors.red,
+                    child: Text(
+                      activeCount.toString(),
+                      style: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
       body: _buildBody(notifier),
     );
   }
