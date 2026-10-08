@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:handy_man/core/enums/provider_list_state.dart';
 import 'package:handy_man/presentation/state/providers_notifier.dart';
 import 'package:handy_man/presentation/widgets/filter_bottom_sheet.dart';
+import 'package:handy_man/presentation/screens/provider_detail/provider_detail_screen.dart';
 
 class ProviderListScreen extends StatefulWidget {
   final String categoryId;
@@ -79,7 +80,11 @@ class _ProviderListScreenState extends State<ProviderListScreen> {
                     backgroundColor: Colors.red,
                     child: Text(
                       activeCount.toString(),
-                      style: const TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -156,6 +161,15 @@ class _ProviderListScreenState extends State<ProviderListScreen> {
                       ? Colors.green.shade100
                       : Colors.red.shade100,
                 ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ProviderDetailScreen(provider: provider),
+                    ),
+                  );
+                },
               );
             },
           ),
