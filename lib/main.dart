@@ -30,6 +30,7 @@ class FixItApp extends StatelessWidget {
     final isDarkMode = context.watch<ModeNotifier>().isDarkMode;
     return MaterialApp(
       title: 'FixIt',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(colorSchemeSeed: Colors.indigo, brightness: Brightness.light),
       darkTheme: ThemeData(colorSchemeSeed: Colors.indigo, brightness: Brightness.dark),
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
