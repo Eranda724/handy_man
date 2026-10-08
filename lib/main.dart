@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:handy_man/presentation/state/mode_notifier.dart';
 import 'package:handy_man/presentation/screens/main_screen.dart';
 import 'package:handy_man/presentation/state/providers_notifier.dart';
+import 'package:handy_man/presentation/state/bookings_notifier.dart';
 
 void main() {
   runApp(
@@ -10,6 +11,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => ModeNotifier()),
         ChangeNotifierProvider(create: (_) => ProvidersNotifier()),
+        ChangeNotifierProvider(create: (_) => BookingsNotifier()),
       ],
       child: const FixItApp(),
     ),
