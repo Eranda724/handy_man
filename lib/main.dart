@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:handy_man/presentation/state/mode_notifier.dart';
 import 'package:handy_man/presentation/screens/main_screen.dart';
+import 'package:handy_man/presentation/state/providers_notifier.dart';
 
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => ModeNotifier())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => ModeNotifier()),
+        ChangeNotifierProvider(create: (_) => ProvidersNotifier()),
+      ],
       child: const FixItApp(),
     ),
   );

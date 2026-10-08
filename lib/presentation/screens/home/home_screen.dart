@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:handy_man/presentation/screens/provider_list/provider_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -109,7 +110,13 @@ class _CategoryCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          debugPrint('Navigating to category: $id');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  ProviderListScreen(categoryId: id, categoryName: name),
+            ),
+          );
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
