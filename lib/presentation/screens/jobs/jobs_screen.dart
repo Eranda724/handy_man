@@ -29,7 +29,7 @@ class JobsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Provider Jobs')),
       body: Column(
         children: [
-          _buildSummary(pendingCount, totalEarnings),
+          _buildSummary(context, pendingCount, totalEarnings),
           Expanded(
             child: myJobs.isEmpty
                 ? const Center(child: Text('No jobs available.'))
@@ -45,10 +45,11 @@ class JobsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSummary(int pending, double earnings) {
+  Widget _buildSummary(BuildContext context, int pending, double earnings) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(16),
-      color: Colors.indigo.shade50,
+      color: isDark ? Colors.indigo.shade900 : Colors.indigo.shade50,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

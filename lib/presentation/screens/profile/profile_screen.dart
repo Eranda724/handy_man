@@ -24,6 +24,16 @@ class ProfileScreen extends StatelessWidget {
             onChanged: (val) => context.read<ModeNotifier>().toggleMode(),
           ),
           const Divider(),
+          SwitchListTile(
+            title: const Text(
+              'Dark Mode',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: const Text('Toggle app theme'),
+            value: context.watch<ModeNotifier>().isDarkMode,
+            onChanged: (val) => context.read<ModeNotifier>().toggleTheme(),
+          ),
+          const Divider(),
           const ListTile(
             leading: Icon(Icons.person),
             title: Text('Account Details'),

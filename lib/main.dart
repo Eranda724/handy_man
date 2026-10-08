@@ -27,9 +27,12 @@ class FixItApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = context.watch<ModeNotifier>().isDarkMode;
     return MaterialApp(
       title: 'FixIt',
-      theme: ThemeData(colorSchemeSeed: Colors.indigo),
+      theme: ThemeData(colorSchemeSeed: Colors.indigo, brightness: Brightness.light),
+      darkTheme: ThemeData(colorSchemeSeed: Colors.indigo, brightness: Brightness.dark),
+      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
       home: const MainScreen(),
     );
   }
