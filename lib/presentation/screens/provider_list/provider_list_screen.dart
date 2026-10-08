@@ -150,13 +150,19 @@ class _ProviderListScreenState extends State<ProviderListScreen> {
 
               final provider = notifier.providers[index];
               return ListTile(
-                leading: CircleAvatar(child: Text(provider.name[0])),
+                leading: Hero(
+                  tag: 'avatar_${provider.id}',
+                  child: CircleAvatar(child: Text(provider.name[0])),
+                ),
                 title: Text(provider.name),
                 subtitle: Text(
                   '★ ${provider.rating} • LKR ${provider.hourlyRate}/hr',
                 ),
                 trailing: Chip(
-                  label: Text(provider.isAvailable ? 'Available' : 'Busy'),
+                  label: Text(
+                    provider.isAvailable ? 'Available' : 'Busy',
+                    style: const TextStyle(color: Colors.black87),
+                  ),
                   backgroundColor: provider.isAvailable
                       ? Colors.green.shade100
                       : Colors.red.shade100,

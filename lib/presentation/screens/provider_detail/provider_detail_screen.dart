@@ -18,11 +18,14 @@ class ProviderDetailScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  child: Text(
-                    provider.name[0],
-                    style: const TextStyle(fontSize: 32),
+                Hero(
+                  tag: 'avatar_${provider.id}',
+                  child: CircleAvatar(
+                    radius: 40,
+                    child: Text(
+                      provider.name[0],
+                      style: const TextStyle(fontSize: 32),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 16),
