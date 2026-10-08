@@ -5,8 +5,35 @@ import 'package:handy_man/domain/double_booking.dart';
 import 'package:handy_man/core/enums/booking_status.dart';
 import 'package:handy_man/domain/booking_logic.dart';
 
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 class BookingsNotifier extends ChangeNotifier {
+  final SharedPreferences _prefs;
   final List<Booking> _bookings = [];
+
+  BookingsNotifier(this._prefs) {
+    _loadBookings();
+  }
+
+  void _loadBookings() {
+    final String? bookingsJson = _prefs.getString('bookings');
+    if (bookingsJson != null) {
+      final List<dynamic> decoded = jsonDecode(bookingsJson);
+      _bookings.addAll(
+        decoded.map((b) => Booking.fromJson(b as Map<String, dynamic>)),
+      );
+      notifyListeners();
+    }
+  }
+
+  void _saveBookings() {
+    final String encoded = jsonEncode(
+      _bookings.map((b) => b.toJson()).toList(),
+    );
+    _prefs.setString('bookings', encoded);
+  }
 
   List<Booking> get bookings => _bookings;
 
@@ -22,6 +49,7 @@ class BookingsNotifier extends ChangeNotifier {
 
     _bookings.add(booking);
     notifyListeners();
+    _saveBookings();
     return true;
   }
 
@@ -47,6 +75,7 @@ class BookingsNotifier extends ChangeNotifier {
         status: BookingStatus.cancelled,
       );
       notifyListeners();
+      _saveBookings();
     }
   }
 
@@ -55,6 +84,7 @@ class BookingsNotifier extends ChangeNotifier {
     if (index != -1) {
       _bookings[index] = _bookings[index].copyWith(isReviewed: true);
       notifyListeners();
+      _saveBookings();
     }
   }
 
@@ -65,6 +95,7 @@ class BookingsNotifier extends ChangeNotifier {
       if (BookingStatusRules.canTransition(currentStatus, newStatus)) {
         _bookings[index] = _bookings[index].copyWith(status: newStatus);
         notifyListeners();
+        _saveBookings();
       } else {
         throw Exception(
           'Blocked in business logic: Invalid transition from ${currentStatus.name} to ${newStatus.name}',
