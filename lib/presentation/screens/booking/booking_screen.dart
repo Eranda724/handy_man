@@ -174,6 +174,26 @@ class _BookingScreenState extends State<BookingScreen> {
             _selectedDate!,
           );
 
+    Widget buildChip(TimeSlot slot) {
+      final isBooked = bookedSlots.contains(slot);
+      return ChoiceChip(
+        label: Center(child: Text(slot.label, style: const TextStyle(fontSize: 11))),
+        padding: EdgeInsets.zero,
+        visualDensity: VisualDensity.compact,
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        selected: _selectedSlot == slot,
+        onSelected: isBooked
+            ? null
+            : (selected) {
+                setState(() {
+                  _selectedSlot = selected ? slot : null;
+                  _updateHours();
+                  _markEdited();
+                });
+              },
+      );
+    }
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -227,71 +247,94 @@ class _BookingScreenState extends State<BookingScreen> {
                 onTap: _pickDate,
               ),
               const SizedBox(height: 24),
-              const Text(
-                'Time Slot',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Wrap(
-                spacing: 8,
-                children: TimeSlot.values.map((slot) {
-                  final isBooked = bookedSlots.contains(slot);
-                  return ChoiceChip(
-                    label: Text(slot.label),
-                    selected: _selectedSlot == slot,
-                    onSelected: isBooked
-                        ? null
-                        : (selected) {
-                            setState(() {
-                              _selectedSlot = selected ? slot : null;
-                              _updateHours();
-                              _markEdited();
-                            });
-                          },
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 24),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Estimated Hours:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Time Slot',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(child: buildChip(TimeSlot.values[0])),
+                                const SizedBox(width: 8),
+                                Expanded(child: buildChip(TimeSlot.values[1])),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(child: buildChip(TimeSlot.values[2])),
+                                const SizedBox(width: 8),
+                                Expanded(child: buildChip(TimeSlot.values[3])),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  const Spacer(),
-                  IconButton(
-                    icon: const Icon(Icons.remove_circle_outline),
-                    onPressed: _estimatedHours > 1
-                        ? () {
-                            setState(() {
-                              _estimatedHours--;
-                              _markEdited();
-                            });
-                          }
-                        : null,
-                  ),
-                  Text(
-                    '$_estimatedHours',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.add_circle_outline),
-                    onPressed: _estimatedHours < _maxHours
-                        ? () {
-                            setState(() {
-                              _estimatedHours++;
-                              _markEdited();
-                            });
-                          }
-                        : null,
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const Text(
+                          'Estimated Hours',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.remove_circle_outline),
+                              onPressed: _estimatedHours > 1
+                                  ? () {
+                                      setState(() {
+                                        _estimatedHours--;
+                                        _markEdited();
+                                      });
+                                    }
+                                  : null,
+                            ),
+                            Text(
+                              '$_estimatedHours',
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add_circle_outline),
+                              onPressed: _estimatedHours < _maxHours
+                                  ? () {
+                                      setState(() {
+                                        _estimatedHours++;
+                                        _markEdited();
+                                      });
+                                    }
+                                  : null,
+                            ),
+                          ],
+                        ),
+                        if (_selectedSlot != null)
+                          Text(
+                            'Max $_maxHours hrs',
+                            style: const TextStyle(color: Colors.grey, fontSize: 12),
+                            textAlign: TextAlign.right,
+                          ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              if (_selectedSlot != null)
-                Text(
-                  'Max $_maxHours hours for this slot',
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-              const SizedBox(height: 24),
               TextFormField(
                 controller: _descController,
                 decoration: const InputDecoration(labelText: 'Job Description'),
@@ -317,7 +360,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 _buildCostRow('Weekend Surcharge (15%)', _weekendSurcharge),
               const Divider(),
               _buildCostRow('Total Estimate', _totalCost, isBold: true),
-              const SizedBox(height: 32),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _submit,
                 style: ElevatedButton.styleFrom(
