@@ -9,8 +9,6 @@ enum BookingStatus {
   final String label;
   const BookingStatus(this.label);
 
-  /// Active = can still block a time slot (double-booking rule)
-  /// and belongs in the "Upcoming" tab.
   bool get isActive =>
       this == pending || this == confirmed || this == inProgress;
 }
